@@ -1,0 +1,7 @@
+patient,hr,spo2,temp_c,systolic,diastolic,weakness,breathing,label
+rahul_stable,82,97,36.8,120,80,0,0,low
+rahul_shift,91,95,37.1,122,80,0,0,medium
+rahul_watch,101,92,37.5,126,82,0,0,medium
+rahul_alert,108,89,37.8,132,86,1,1,high
+priya_watch,96,94,37.2,128,84,0,0,medium
+sita_stable,76,96,36.6,118,76,0,0,low

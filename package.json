@@ -1,0 +1,14 @@
+{
+  "name": "wardzero",
+  "private": true,
+  "version": "1.0.0",
+  "description": "WardZero — Smart Home Hospital. Connected home-care monitoring with explainable early warning.",
+  "scripts": {
+    "install:all": "npm install --prefix backend && npm install --prefix frontend",
+    "dev": "concurrently -n api,web -c blue,magenta \"npm run dev --prefix backend\" \"npm run dev --prefix frontend\"",
+    "start": "npm run dev"
+  },
+  "devDependencies": {
+    "concurrently": "^9.2.1"
+  }
+}

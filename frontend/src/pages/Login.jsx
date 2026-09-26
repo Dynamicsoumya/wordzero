@@ -34,14 +34,19 @@ export default function Login() {
   if (!authReady) return null;
   if (next) return <Navigate to={next} replace />;
 
-  async function submit(event) {
-    event.preventDefault();
+  async function signIn(mail, pass) {
+    setError("");
     try {
-      const signedIn = await login(email, password, remember);
+      const signedIn = await login(mail, pass, remember);
       navigate(destination(signedIn) || "/");
     } catch (err) {
       setError(err.message);
     }
+  }
+
+  async function submit(event) {
+    event.preventDefault();
+    await signIn(email, password);
   }
 
   return (
@@ -71,9 +76,20 @@ export default function Login() {
         <form className="login-card" onSubmit={submit}>
           <div className="card-brand"><BrandLogo size={36} /><span>WardZero</span><ThemeToggle /></div>
           <h2>Welcome back</h2>
-          <p className="lede">Sign in with the email and password from your account.</p>
+          <p className="lede">Pick a role to open the ward, or sign in with your own email.</p>
           {notice ? <div className="notice">{notice}</div> : null}
           {error ? <div className="error">{error}</div> : null}
+          <div className="demo-open">
+            <p>Sign in as</p>
+            <div className="demo-accounts">
+              {ACCOUNTS.map(([label, mail, pass]) => (
+                <button type="button" key={label} onClick={() => { setEmail(mail); setPassword(pass); signIn(mail, pass); }}>
+                  {label}<small>{mail}</small>
+                </button>
+              ))}
+            </div>
+          </div>
+          <p className="or-line"><span>or use your account</span></p>
           <label className="field">Email<input value={email} onChange={(e) => setEmail(e.target.value)} type="email" placeholder="name@email.com" required /></label>
           <label className="field">Password
             <span className="password-field">
@@ -87,7 +103,7 @@ export default function Login() {
             <label className="check-row"><input type="checkbox" checked={remember} onChange={(e) => setRemember(e.target.checked)} /> Remember me</label>
             <button type="button" className="linkish" onClick={() => navigate("/forgot")}>Forgot password?</button>
           </div>
-          <button className="btn primary wide" style={{ marginTop: 16 }} type="submit">Login</button>
+          <button className="btn primary wide" style={{ marginTop: 16 }} type="submit">Sign in</button>
           <div className="secure"><Lock size={16} /> Your patient data is protected</div>
           <Link className="create-cta" to="/signup">
             <span className="create-cta-icon"><UserPlus size={18} /></span>
@@ -96,16 +112,6 @@ export default function Login() {
               <strong>Create an account</strong>
             </span>
           </Link>
-          <details className="demo-fold">
-            <summary>Use a demo account</summary>
-            <div className="demo-accounts">
-              {ACCOUNTS.map(([label, mail, pass]) => (
-                <button type="button" key={label} onClick={() => { setEmail(mail); setPassword(pass); }}>
-                  {label}<small>{mail}</small>
-                </button>
-              ))}
-            </div>
-          </details>
         </form>
       </section>
     </div>

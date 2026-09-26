@@ -74,7 +74,8 @@ export default function Signup() {
         <form className="login-card" onSubmit={submit}>
           <div className="card-brand"><BrandLogo size={36} /><span>WardZero</span><ThemeToggle /></div>
           <h2>Create account</h2>
-          <p className="lede">This step is only for a new email. After signup you return to login and use the same password.</p>
+          <p className="lede">This step is only for a new email. After signup you return here and sign in with the same password.</p>
+          <Link className="signin-cta" to="/">Already have an account? Sign in</Link>
           {error ? <div className="error">{error}</div> : null}
           <label className="field">Full name<input value={form.name} onChange={(e) => set("name", e.target.value)} placeholder="Priya Sharma" required /></label>
           <label className="field">Email address<input value={form.email} onChange={(e) => set("email", e.target.value)} type="email" placeholder="you@email.com" required /></label>
@@ -87,7 +88,7 @@ export default function Signup() {
             </select>
           </label>
           <button className="btn primary wide" type="submit" disabled={busy}>{busy ? "Creating account…" : "Create account"}</button>
-          <p className="lede" style={{ margin: "16px 0 0" }}>Already registered? <Link to="/">Login</Link>. Do not create the account again.</p>
+          <p className="lede" style={{ margin: "16px 0 0" }}>After this, use <Link to="/">Sign in</Link> with the same email and password. Do not create the account again.</p>
         </form>
       </section>
     </div>

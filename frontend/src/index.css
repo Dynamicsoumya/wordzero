@@ -188,10 +188,16 @@ h1, h2, h3, p { margin: 0; }
 .check-row { display: flex; gap: 8px; align-items: center; font-size: 14px; color: var(--muted); }
 .linkish { background: none; border: 0; color: var(--primary); font-weight: 700; padding: 0; }
 .secure { margin-top: 22px; color: var(--muted); font-size: 13px; display: flex; gap: 8px; align-items: center; }
-.demo-fold { margin-top: 16px; }
-.demo-fold summary { cursor: pointer; color: var(--primary); font-weight: 750; font-size: 14px; }
-.demo-fold summary:hover { text-decoration: underline; }
-.demo-accounts { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 10px; }
+.demo-open { margin-bottom: 4px; }
+.demo-open > p { margin: 0 0 8px; font-size: 13px; font-weight: 800; color: var(--text); }
+.or-line { display: flex; align-items: center; gap: 10px; margin: 4px 0 16px; color: var(--muted); font-size: 12px; font-weight: 750; }
+.or-line::before, .or-line::after { content: ""; flex: 1; height: 1px; background: var(--line); }
+.signin-cta {
+  display: block; margin: -8px 0 18px; padding: 12px 14px; border-radius: 14px; text-align: center;
+  border: 1px solid var(--line); background: var(--input); color: var(--primary); font-weight: 800; text-decoration: none;
+}
+.signin-cta:hover { border-color: #93c5fd; background: var(--primary-soft); }
+.demo-accounts { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
 .demo-accounts button {
   text-align: left; border: 1px solid var(--line); background: var(--input); color: var(--text); border-radius: 14px; padding: 10px 12px; font-weight: 750;
 }
@@ -306,7 +312,7 @@ tbody tr:hover { background: var(--hover); }
 
 .card { background: var(--card); border: 1px solid var(--line); border-radius: 16px; box-shadow: var(--shadow); }
 .banner { border-radius: 16px; padding: 16px 18px; display: flex; justify-content: space-between; gap: 16px; align-items: center; margin-bottom: 16px; }
-.banner.ok { background: var(--card); border: 1px solid var(--line); border-left: 4px solid var(--success); }
+.banner.ok { justify-content: flex-start; gap: 12px; background: var(--card); border: 1px solid var(--line); border-left: 4px solid var(--success); }
 .banner-mark { width: 36px; height: 36px; border-radius: 12px; display: grid; place-items: center; flex: none; background: var(--success-soft); color: var(--success); }
 .banner.critical { background: var(--critical-soft); border: 1px solid #fecaca; animation: pulse 1.8s ease-in-out infinite; }
 .banner.warning { background: var(--warning-soft); border: 1px solid #fde68a; }

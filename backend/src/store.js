@@ -463,7 +463,50 @@ const SEED_ROLES = [
   ["caregiver", "Caregiver", "Sees only the information shared for assigned patients."],
 ];
 
+async function ensureCoreTables() {
+  await pool.query(`
+    CREATE TABLE IF NOT EXISTS users (
+      id TEXT PRIMARY KEY,
+      name TEXT NOT NULL,
+      email TEXT NOT NULL UNIQUE,
+      phone TEXT,
+      password_hash TEXT NOT NULL,
+      department TEXT,
+      role TEXT NOT NULL DEFAULT 'pending',
+      status TEXT NOT NULL DEFAULT 'pending',
+      caregiver_id TEXT
+    )
+  `);
+  await pool.query(`
+    CREATE TABLE IF NOT EXISTS patients (
+      id TEXT PRIMARY KEY,
+      name TEXT NOT NULL,
+      age INTEGER NOT NULL,
+      room TEXT NOT NULL,
+      condition TEXT,
+      caregiver_id TEXT,
+      hr NUMERIC,
+      spo2 NUMERIC,
+      temp NUMERIC,
+      systolic INTEGER,
+      diastolic INTEGER
+    )
+  `);
+  await pool.query(`
+    CREATE TABLE IF NOT EXISTS alerts (
+      id TEXT PRIMARY KEY,
+      patient_id TEXT REFERENCES patients(id),
+      severity TEXT NOT NULL,
+      title TEXT NOT NULL,
+      body TEXT,
+      acknowledged BOOLEAN NOT NULL DEFAULT false,
+      created_at TIMESTAMPTZ NOT NULL DEFAULT now()
+    )
+  `);
+}
+
 export async function initDatabase() {
+  await ensureCoreTables();
   await pool.query(`
     CREATE TABLE IF NOT EXISTS roles (
       code TEXT PRIMARY KEY,

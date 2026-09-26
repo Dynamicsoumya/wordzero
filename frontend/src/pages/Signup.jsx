@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link, Navigate, useNavigate } from "react-router-dom";
-import { ShieldCheck, Stethoscope, UserRound } from "lucide-react";
+import { Eye, EyeOff, ShieldCheck, Stethoscope, UserRound } from "lucide-react";
 import BrandLogo from "../components/BrandLogo";
 import ThemeToggle from "../components/ThemeToggle";
 import { useWard } from "../context/WardContext";
@@ -14,6 +14,8 @@ export default function Signup() {
   const [form, setForm] = useState({ name: "", email: "", phone: "", password: "", confirm: "", department: "" });
   const [error, setError] = useState("");
   const [busy, setBusy] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirm, setShowConfirm] = useState(false);
 
   if (user?.role === "pending" || user?.status === "pending") return <Navigate to="/pending" replace />;
   if (CLINICAL_ROLES.includes(user?.role)) return <Navigate to="/app" replace />;
@@ -80,8 +82,22 @@ export default function Signup() {
           <label className="field">Full name<input value={form.name} onChange={(e) => set("name", e.target.value)} placeholder="Priya Sharma" required /></label>
           <label className="field">Email address<input value={form.email} onChange={(e) => set("email", e.target.value)} type="email" placeholder="you@email.com" required /></label>
           <label className="field">Phone number<input value={form.phone} onChange={(e) => set("phone", e.target.value)} type="tel" placeholder="+91 98400 00000" required /></label>
-          <label className="field">Password<input value={form.password} onChange={(e) => set("password", e.target.value)} type="password" placeholder="At least 6 characters" minLength={6} required /></label>
-          <label className="field">Confirm password<input value={form.confirm} onChange={(e) => set("confirm", e.target.value)} type="password" placeholder="Type the password again" minLength={6} required /></label>
+          <label className="field">Password
+            <span className="password-field">
+              <input value={form.password} onChange={(e) => set("password", e.target.value)} type={showPassword ? "text" : "password"} placeholder="At least 6 characters" minLength={6} required />
+              <button type="button" className="password-toggle" aria-label={showPassword ? "Hide password" : "Show password"} onClick={() => setShowPassword((value) => !value)}>
+                {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+              </button>
+            </span>
+          </label>
+          <label className="field">Confirm password
+            <span className="password-field">
+              <input value={form.confirm} onChange={(e) => set("confirm", e.target.value)} type={showConfirm ? "text" : "password"} placeholder="Type the password again" minLength={6} required />
+              <button type="button" className="password-toggle" aria-label={showConfirm ? "Hide password" : "Show password"} onClick={() => setShowConfirm((value) => !value)}>
+                {showConfirm ? <EyeOff size={18} /> : <Eye size={18} />}
+              </button>
+            </span>
+          </label>
           <label className="field">Department
             <select value={form.department} onChange={(e) => set("department", e.target.value)}>
               {DEPARTMENTS.map((item) => <option key={item || "none"} value={item}>{item || "Choose a department"}</option>)}

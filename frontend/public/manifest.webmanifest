@@ -3,6 +3,9 @@
   "short_name": "WardZero",
   "start_url": "/app",
   "display": "standalone",
+  "icons": [
+    { "src": "/favicon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" }
+  ],
   "background_color": "#0b1220",
   "theme_color": "#0b1220"
 }

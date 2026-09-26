@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Link, Navigate, useNavigate } from "react-router-dom";
+import { ShieldCheck, Stethoscope, UserRound } from "lucide-react";
 import BrandLogo from "../components/BrandLogo";
 import ThemeToggle from "../components/ThemeToggle";
 import { useWard } from "../context/WardContext";
@@ -59,10 +60,15 @@ export default function Signup() {
           <div><b>WardZero</b><small>Smart Home Hospital</small></div>
         </div>
         <div>
-          <h1>First time? Create your account.</h1>
-          <p>Enter your name, email, and password once. Then log in with that same email and password. An admin verifies the account and assigns Admin, Doctor, Nurse, or Caregiver.</p>
+          <p className="eyebrow">Join the home ward</p>
+          <h1>Your place on the care team starts here.</h1>
+          <ol className="hero-steps">
+            <li><span><ShieldCheck size={18} /></span><div><b>Create the account</b><small>Name, email, and a password you will use to sign in.</small></div></li>
+            <li><span><UserRound size={18} /></span><div><b>Wait for a role</b><small>An admin assigns Admin, Doctor, Nurse, or Caregiver.</small></div></li>
+            <li><span><Stethoscope size={18} /></span><div><b>Open the ward</b><small>Sign in and see only the patients assigned to you.</small></div></li>
+          </ol>
         </div>
-        <p className="hero-note">An admin assigns the role after the account is created.</p>
+        <p className="hero-note">Decision support for the home ward. A clinician still makes the call.</p>
       </section>
       <section className="login-panel">
         <form className="login-card" onSubmit={submit}>
@@ -70,14 +76,14 @@ export default function Signup() {
           <h2>Create account</h2>
           <p className="lede">This step is only for a new email. After signup you return to login and use the same password.</p>
           {error ? <div className="error">{error}</div> : null}
-          <label className="field">Full name<input value={form.name} onChange={(e) => set("name", e.target.value)} required /></label>
-          <label className="field">Email address<input value={form.email} onChange={(e) => set("email", e.target.value)} type="email" required /></label>
+          <label className="field">Full name<input value={form.name} onChange={(e) => set("name", e.target.value)} placeholder="Priya Sharma" required /></label>
+          <label className="field">Email address<input value={form.email} onChange={(e) => set("email", e.target.value)} type="email" placeholder="you@email.com" required /></label>
           <label className="field">Phone number<input value={form.phone} onChange={(e) => set("phone", e.target.value)} type="tel" placeholder="+91 98400 00000" required /></label>
-          <label className="field">Password<input value={form.password} onChange={(e) => set("password", e.target.value)} type="password" minLength={6} required /></label>
-          <label className="field">Confirm password<input value={form.confirm} onChange={(e) => set("confirm", e.target.value)} type="password" minLength={6} required /></label>
+          <label className="field">Password<input value={form.password} onChange={(e) => set("password", e.target.value)} type="password" placeholder="At least 6 characters" minLength={6} required /></label>
+          <label className="field">Confirm password<input value={form.confirm} onChange={(e) => set("confirm", e.target.value)} type="password" placeholder="Type the password again" minLength={6} required /></label>
           <label className="field">Department
             <select value={form.department} onChange={(e) => set("department", e.target.value)}>
-              {DEPARTMENTS.map((item) => <option key={item || "none"} value={item}>{item || "Optional"}</option>)}
+              {DEPARTMENTS.map((item) => <option key={item || "none"} value={item}>{item || "Choose a department"}</option>)}
             </select>
           </label>
           <button className="btn primary wide" type="submit" disabled={busy}>{busy ? "Creating account…" : "Create account"}</button>

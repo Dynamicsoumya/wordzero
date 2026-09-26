@@ -74,10 +74,10 @@ export default function Login() {
           <p className="lede">Sign in with the email and password from your account.</p>
           {notice ? <div className="notice">{notice}</div> : null}
           {error ? <div className="error">{error}</div> : null}
-          <label className="field">Email<input value={email} onChange={(e) => setEmail(e.target.value)} type="email" required /></label>
+          <label className="field">Email<input value={email} onChange={(e) => setEmail(e.target.value)} type="email" placeholder="name@email.com" required /></label>
           <label className="field">Password
             <span className="password-field">
-              <input value={password} onChange={(e) => setPassword(e.target.value)} type={showPassword ? "text" : "password"} required />
+              <input value={password} onChange={(e) => setPassword(e.target.value)} type={showPassword ? "text" : "password"} placeholder="Your password" required />
               <button type="button" className="password-toggle" aria-label={showPassword ? "Hide password" : "Show password"} onClick={() => setShowPassword((value) => !value)}>
                 {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
               </button>

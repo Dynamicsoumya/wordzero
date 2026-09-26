@@ -162,6 +162,19 @@ h1, h2, h3, p { margin: 0; }
 .field input:focus, .field select:focus, .field textarea:focus {
   border-color: #93c5fd; background: var(--card); box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.12);
 }
+.field input::placeholder { color: var(--muted); opacity: 0.9; }
+.hero-steps { list-style: none; padding: 0; margin: 28px 0 0; display: grid; gap: 12px; max-width: 460px; position: relative; z-index: 1; }
+.hero-steps li {
+  display: flex; gap: 14px; align-items: center;
+  background: rgba(255,255,255,0.12); border: 1px solid rgba(255,255,255,0.22);
+  border-radius: 18px; padding: 14px 16px; backdrop-filter: blur(10px);
+}
+.hero-steps li > span {
+  width: 40px; height: 40px; border-radius: 12px; display: grid; place-items: center; flex: none;
+  background: rgba(255,255,255,0.16);
+}
+.hero-steps b { display: block; font-size: 15px; letter-spacing: -0.02em; }
+.hero-steps small { display: block; margin-top: 2px; color: #dbeafe; font-size: 13px; line-height: 1.35; }
 .field textarea { min-height: 110px; resize: vertical; }
 .password-field { position: relative; display: block; }
 .password-field input { width: 100%; padding-right: 44px; }
@@ -434,7 +447,7 @@ tr.click:hover { background: var(--hover); cursor: pointer; }
 @media (max-width: 760px) {
   .login, .dash, .two, .trio, .vital-grid, .metric-grid, .equip-grid, .demo-accounts { grid-template-columns: 1fr; }
   .login-hero { padding: 22px 20px 8px; min-height: auto; }
-  .login-hero h1, .checks, .hero-float, .hero-note, .eyebrow, .login-hero::after { display: none; }
+  .login-hero h1, .checks, .hero-float, .hero-steps, .hero-note, .eyebrow, .login-hero::after { display: none; }
   .login-panel { padding: 8px 16px 28px; align-items: start; }
   .card-brand .logo-mark, .card-brand span { display: none; }
   .card-brand { justify-content: flex-end; margin-bottom: 8px; }

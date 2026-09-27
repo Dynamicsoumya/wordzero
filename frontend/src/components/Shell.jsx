@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { NavLink, Outlet, useNavigate } from "react-router-dom";
 import {
   Activity, Bell, ChartColumn, ChevronDown, ClipboardCheck, HeartPulse, LayoutDashboard, NotebookPen, Pill, Radio,
-  ScrollText, Settings, Siren, UserRound, Users, Sparkles, LogOut, Wifi, WifiOff, Smartphone,
+  ScrollText, Settings, Siren, UserCog, UserRound, Users, Sparkles, LogOut, Wifi, WifiOff, Smartphone,
 } from "lucide-react";
 import { useWard } from "../context/WardContext";
 import { can, ROLE_LABEL } from "../access";
@@ -29,6 +29,7 @@ const GROUPS = [
     ["/app/reports", "Reports & History", ChartColumn, false, "reports"],
     ["/app/iot", "Device & IoT Simulator", Radio, false, "devices"],
     ["/app/audit", "Safety & Audit Logs", ScrollText, false, "audit"],
+    ["/app/users", "User Management", UserCog, false, "users"],
     ["/app/settings", "Settings", Settings, false, "settings"],
   ]],
 ];

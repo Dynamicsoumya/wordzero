@@ -1,11 +1,18 @@
 import { useState } from "react";
 import { Link, Navigate } from "react-router-dom";
-import { Check, KeyRound, Lock, ShieldCheck } from "lucide-react";
+import { Check, Eye, EyeOff, KeyRound, Lock, ShieldCheck } from "lucide-react";
 import BrandLogo from "../components/BrandLogo";
 import ThemeToggle from "../components/ThemeToggle";
 import { useWard } from "../context/WardContext";
 import { api } from "../api";
 import { CLINICAL_ROLES } from "../access";
+
+const ACCOUNTS = [
+  ["Admin", "admin@wardzero.care"],
+  ["Doctor", "doctor@wardzero.care"],
+  ["Nurse", "nurse@wardzero.care"],
+  ["Caregiver", "amit@wardzero.care"],
+];
 
 export default function Forgot() {
   const { user } = useWard();
@@ -14,18 +21,22 @@ export default function Forgot() {
   const [code, setCode] = useState("");
   const [password, setPassword] = useState("");
   const [confirm, setConfirm] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirm, setShowConfirm] = useState(false);
   const [error, setError] = useState("");
   const [busy, setBusy] = useState(false);
 
   if (user && (user.role === "pending" || user.status === "pending")) return <Navigate to="/pending" replace />;
   if (user && CLINICAL_ROLES.includes(user.role)) return <Navigate to="/app" replace />;
 
-  async function requestCode(event) {
+  async function requestCode(event, nextEmail = email) {
     event.preventDefault();
+    const mail = String(nextEmail || "").trim();
+    setEmail(mail);
     setBusy(true);
     setError("");
     try {
-      const result = await api("/auth/forgot", { method: "POST", body: { email } });
+      const result = await api("/auth/forgot", { method: "POST", body: { email: mail } });
       setEmail(result.email);
       setCode(result.code);
       setStep("reset");
@@ -86,8 +97,18 @@ export default function Forgot() {
           {step === "email" ? (
             <form onSubmit={requestCode}>
               <h2>Forgot password</h2>
-              <p className="lede">Enter the email on your WardZero account. We will show a one-time code so you can set a new password.</p>
+              <p className="lede">Use an email that already has a WardZero account. A personal inbox only works after you sign up with it.</p>
               {error ? <div className="error">{error}</div> : null}
+              <div className="demo-open">
+                <p>Reset a ward account</p>
+                <div className="demo-accounts">
+                  {ACCOUNTS.map(([label, mail]) => (
+                    <button type="button" key={mail} onClick={(event) => requestCode(event, mail)} disabled={busy}>
+                      {label}<small>{mail}</small>
+                    </button>
+                  ))}
+                </div>
+              </div>
               <label className="field">Email<input value={email} onChange={(e) => setEmail(e.target.value)} type="email" autoComplete="email" required /></label>
               <button className="btn primary wide" type="submit" disabled={busy}>{busy ? "Checking…" : "Send reset code"}</button>
             </form>
@@ -102,8 +123,22 @@ export default function Forgot() {
                 {code.split("").map((digit, index) => <span key={`${digit}-${index}`}>{digit}</span>)}
               </div>
               <p className="reset-hint"><KeyRound size={15} /> Keep this code on this screen. It is already applied.</p>
-              <label className="field">New password<input value={password} onChange={(e) => setPassword(e.target.value)} type="password" autoComplete="new-password" minLength={6} required /></label>
-              <label className="field">Confirm password<input value={confirm} onChange={(e) => setConfirm(e.target.value)} type="password" autoComplete="new-password" minLength={6} required /></label>
+              <label className="field">New password
+                <span className="password-field">
+                  <input value={password} onChange={(e) => setPassword(e.target.value)} type={showPassword ? "text" : "password"} autoComplete="new-password" minLength={6} required />
+                  <button type="button" className="password-toggle" aria-label={showPassword ? "Hide password" : "Show password"} onClick={() => setShowPassword((value) => !value)}>
+                    {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                  </button>
+                </span>
+              </label>
+              <label className="field">Confirm password
+                <span className="password-field">
+                  <input value={confirm} onChange={(e) => setConfirm(e.target.value)} type={showConfirm ? "text" : "password"} autoComplete="new-password" minLength={6} required />
+                  <button type="button" className="password-toggle" aria-label={showConfirm ? "Hide password" : "Show password"} onClick={() => setShowConfirm((value) => !value)}>
+                    {showConfirm ? <EyeOff size={18} /> : <Eye size={18} />}
+                  </button>
+                </span>
+              </label>
               <button className="btn primary wide" type="submit" disabled={busy}>{busy ? "Saving…" : "Update password"}</button>
               <button type="button" className="linkish reset-back" onClick={() => { setStep("email"); setError(""); setPassword(""); setConfirm(""); }}>Use a different email</button>
             </form>

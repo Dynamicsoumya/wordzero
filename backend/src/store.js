@@ -447,6 +447,13 @@ async function reloadUsers() {
   db.users = rows.map(mapDbUser);
 }
 
+async function findUserByEmail(email) {
+  const normalized = String(email || "").trim().toLowerCase();
+  if (!normalized) return null;
+  await reloadUsers();
+  return db.users.find((item) => String(item.email || "").trim().toLowerCase() === normalized) || null;
+}
+
 const SEED_USERS = [
   ["admin", "Dr. Meera Shah", "admin@wardzero.care", "+91 98400 10001", "admin123", "Administration", "admin", "approved", null, ["rahul", "priya", "sita"]],
   ["doctor", "Dr. Kabir Iyer", "doctor@wardzero.care", "+91 98400 10002", "doctor123", "General Ward", "doctor", "approved", null, ["rahul", "priya"]],
@@ -590,7 +597,7 @@ export async function initDatabase() {
 }
 
 export async function login(email, password) {
-  const user = db.users.find((item) => item.email.toLowerCase() === String(email || "").toLowerCase());
+  const user = await findUserByEmail(email);
   if (!user) return null;
   const matches = await bcrypt.compare(String(password || ""), user.passwordHash || "");
   if (!matches) return null;
@@ -642,9 +649,8 @@ function hashResetCode(code) {
 }
 
 export async function requestPasswordReset(email) {
-  const normalized = String(email || "").trim().toLowerCase();
-  const user = db.users.find((item) => item.email.toLowerCase() === normalized);
-  if (!user) return { error: "No account uses that email.", status: 404 };
+  const user = await findUserByEmail(email);
+  if (!user) return { error: "No account uses that email. Use the email on a WardZero account, such as admin@wardzero.care.", status: 404 };
   await ensureResetTable();
   const code = String(crypto.randomInt(100000, 1000000));
   const expiresAt = Date.now() + 15 * 60 * 1000;
@@ -657,10 +663,9 @@ export async function requestPasswordReset(email) {
 }
 
 export async function resetPassword(email, code, password) {
-  const normalized = String(email || "").trim().toLowerCase();
   const next = String(password || "");
   if (next.length < 6) return { error: "Password must be at least 6 characters.", status: 400 };
-  const user = db.users.find((item) => item.email.toLowerCase() === normalized);
+  const user = await findUserByEmail(email);
   if (!user) return { error: "That reset code is not valid.", status: 400 };
   await ensureResetTable();
   const { rows } = await pool.query(
